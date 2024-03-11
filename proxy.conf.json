@@ -1,0 +1,10 @@
+{
+    "/assets/toDoApp/":{
+        "target": "http://localhost:5006",
+        "secure": false
+    },
+    "/assets/usersApp/":{
+        "target": "http://localhost:5008",
+        "secure": false
+    }
+}

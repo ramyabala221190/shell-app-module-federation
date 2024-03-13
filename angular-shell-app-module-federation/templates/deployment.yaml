@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: {{.Chart.Name}}-deployment-{{.Values.environment}}
+ labels:
+  app: {{.Chart.Name}}-deployment-{{.Values.environment}}
+
+spec:
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}-deployment-{{.Values.environment}}
+
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}-deployment-{{.Values.environment}}
+
+    spec:
+     containers:
+       - name : {{.Chart.Name}}-{{.Values.pod.containerName}}-{{.Values.environment}}
+         image: {{.Values.pod.imageName}}
+         ports:
+          - containerPort : {{.Values.pod.containerPort}} #this should match the port nginx listening on
+         volumeMounts:
+         - name: {{.Values.config.volume}}
+           mountPath: /{{.Values.config.mountPath}}
+           readOnly: true
+     volumes:
+     - name: {{.Values.config.volume}}
+       configMap:
+         name: {{.Values.environment}}-{{.Values.config.name}}
+#we are loading all environment variables from the config map with name :dev-app-config
+
+
+#helm install helm-release helm-test
+#helm upgrade helm-release helm-test

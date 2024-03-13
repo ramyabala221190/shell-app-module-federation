@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: {{.Chart.Name}}-{{.Values.services.name}}-{{.Values.environment}}  #service name
+spec:
+ type: {{.Values.services.type}}  #type of service
+ selector:
+    app: {{.Chart.Name}}-deployment-{{.Values.environment}} #selecting the pods
+ ports:  # this is the port application will be accessed on if using LoadBalancer type
+ {{if eq .Values.environment "dev"}}
+ - port: {{.Values.services.devAppPort}}
+   nodePort: {{.Values.services.nodeDevPort}}
+ {{else if eq .Values.environment "uat"}}
+ - port: {{.Values.services.uatAppPort}}
+ - nodePort: {{.Values.services.nodeUatPort}}
+ {{else if eq .Values.environment "prod"}}
+ - port: {{.Values.services.prodAppPort}}
+ - nodePort: {{.Values.services.nodeProdPort}}
+ {{end}}
+   targetPort: {{.Values.pod.containerPort}}   #this should match the port nginx listening on

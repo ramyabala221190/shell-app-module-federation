@@ -1,0 +1,5 @@
+{
+    "toDoApp": "http://localhost:5026/remoteToDoApp.js",
+    "usersApp":"http://localhost:5028/remoteUsersApp.js"
+}
+  

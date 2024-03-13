@@ -1,0 +1,23 @@
+
+pod:
+ containerName: "container"
+ imageName: ""
+ containerPort: 80
+
+
+services:
+  name: "service"
+  type: NodePort  #due to external IP pending issue, changed from LoadBalancer to NodePort
+  devAppPort: 8086
+  uatAppPort: 8087
+  prodAppPort: 8088
+  nodeDevPort: 5004
+  nodeUatPort: 5014
+  nodeProdPort: 5024
+
+environment: ""
+
+config:
+  name: shell-app-config
+  volume: shell-app-config-vol
+  mountPath: config

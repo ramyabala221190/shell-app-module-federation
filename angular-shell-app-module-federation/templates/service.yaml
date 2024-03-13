@@ -12,9 +12,9 @@ spec:
    nodePort: {{.Values.services.nodeDevPort}}
  {{else if eq .Values.environment "uat"}}
  - port: {{.Values.services.uatAppPort}}
- - nodePort: {{.Values.services.nodeUatPort}}
+   nodePort: {{.Values.services.nodeUatPort}}
  {{else if eq .Values.environment "prod"}}
  - port: {{.Values.services.prodAppPort}}
- - nodePort: {{.Values.services.nodeProdPort}}
+   nodePort: {{.Values.services.nodeProdPort}}
  {{end}}
    targetPort: {{.Values.pod.containerPort}}   #this should match the port nginx listening on

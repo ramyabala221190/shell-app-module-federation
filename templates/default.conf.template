@@ -13,6 +13,8 @@
     gzip_buffers            16 8k;
     client_max_body_size    256M;
 
+    add_header 'environment' $env;
+
     root /usr/share/nginx/html;
         
          location /assets/toDoApp/ {

@@ -33,7 +33,7 @@ spec:
          name: {{.Values.environment}}-{{.Values.config.name}}
      - name : nginx-vol
        hostPath:
-         path: ./templates
+         path: /templates
 #we are loading all environment variables from the config map with name :dev-app-config
 
 

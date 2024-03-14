@@ -34,8 +34,9 @@ RUN rm -r /usr/share/nginx/html/*
 
 #Now I need to access the dist folder from the previous stage. 
 # I copy the dist folder into the folder that nginx uses to refer static files.
+RUN mkdir /etc/nginx/templates
+COPY --from=node /app/templates/default.conf.template /etc/nginx/templates
 COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
-COPY --from=node /app/templates /templates/
 
 # to replace the default nginx config file with our config file. In our config file we
 # have added an additional check. When we are routing to other components with different paths,

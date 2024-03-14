@@ -44,8 +44,6 @@ spec:
      - name: {{.Values.config.volume}}
        configMap:
          name: {{.Values.environment}}-{{.Values.config.name}}
-          items:
-          - key: "env"
 
 #we are loading all environment variables from the config map with name :dev-app-config
 

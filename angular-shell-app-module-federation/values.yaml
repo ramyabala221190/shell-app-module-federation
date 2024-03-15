@@ -18,14 +18,14 @@ services:
    prod: 30024
 
 remoteA:
- dev: '30006'
- uat: '30016'
- prod: '30026'
+ dev: 30006
+ uat: 30016
+ prod: 30026
 
 remoteB:
- dev: '30008'
- uat: '30018'
- prod: '30028'
+ dev: 30008
+ uat: 30018
+ prod: 30028
    
 
 environment: null

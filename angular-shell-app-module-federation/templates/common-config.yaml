@@ -4,5 +4,5 @@ metadata:
   name: common-shell-app-config
 
 data:
-  nginxPort: "\"{{.Values.pod.containerPort}}\""
+  nginxPort: "{{.Values.pod.containerPort}}"
 

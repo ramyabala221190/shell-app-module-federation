@@ -9,9 +9,9 @@ services:
   name: "service"
   type: NodePort  #due to external IP pending issue, changed from LoadBalancer to NodePort
   app:
-   dev: 8086
-   uat: 8087
-   prod: 8088
+   dev: 8083
+   uat: 8084
+   prod: 8085
   node:
    dev: 30004
    uat: 30014

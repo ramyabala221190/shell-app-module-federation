@@ -40,6 +40,13 @@ spec:
                   name: {{.Values.environment}}-{{.Values.config.name}}
               # Specify the key associated with the value
                   key: remoteB
+           - name: nginxPort
+             valueFrom:
+               configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                  name: common-{{.Values.config.name}}
+              # Specify the key associated with the value
+                  key: nginxPort
      volumes:
      - name: {{.Values.config.volume}}
        configMap:

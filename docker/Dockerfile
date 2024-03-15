@@ -45,7 +45,7 @@ COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
 #COPY nginx/nginx.config /etc/nginx/conf.d/
 #COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
 
-#COPY nginx/nginx.config /etc/nginx/templates/nginx.conf.template
+COPY nginx/nginx.config /etc/nginx/templates/nginx.conf.template
 
 EXPOSE 80
 

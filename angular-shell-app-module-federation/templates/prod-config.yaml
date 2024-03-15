@@ -5,4 +5,6 @@ metadata:
 
 data:
   env: "prod"
+  remoteA: '30026'
+  remoteB : '30028'
 

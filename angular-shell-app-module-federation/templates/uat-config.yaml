@@ -5,4 +5,6 @@ metadata:
 
 data:
   env: "uat"
+  remoteA: '30016'
+  remoteB : '30018'
 

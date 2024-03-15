@@ -7,4 +7,5 @@ data:
   env: "dev"
   remoteA: '30006'
   remoteB : '30008'
+  NGINX_ENVSUBST_OUTPUT_DIR: '/etc/nginx'
 

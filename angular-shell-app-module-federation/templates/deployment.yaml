@@ -40,6 +40,13 @@ spec:
                   name: {{.Values.environment}}-{{.Values.config.name}}
               # Specify the key associated with the value
                   key: remoteB
+           - name: NGINX_ENVSUBST_OUTPUT_DIR
+             valueFrom:
+               configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                  name: {{.Values.environment}}-{{.Values.config.name}}
+              # Specify the key associated with the value
+                  key: NGINX_ENVSUBST_OUTPUT_DIR
      volumes:
      - name: {{.Values.config.volume}}
        configMap:

@@ -35,9 +35,7 @@ RUN rm -r /usr/share/nginx/html/*
 
 #Now I need to access the dist folder from the previous stage. 
 # I copy the dist folder into the folder that nginx uses to refer static files.
-#COPY --from=node /app/dist/shell-application /usr/share/nginx/html/shell
-
-COPY --from=node /app/dist/shell-application /app
+COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
 
 
 # to replace the default nginx config file with our config file. In our config file we
@@ -45,7 +43,9 @@ COPY --from=node /app/dist/shell-application /app
 # nginx might think its a server side path and return 404. In such cases we instruct nginx to 
 # redirect to index.html file. This is very important
 #COPY nginx/nginx.config /etc/nginx/conf.d/
-COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
+#COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
+
+COPY nginx/nginx.config /etc/nginx/templates/nginx.conf.template
 
 EXPOSE 80
 

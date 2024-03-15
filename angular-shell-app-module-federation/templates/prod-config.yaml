@@ -4,7 +4,7 @@ metadata:
   name: prod-shell-app-config
 
 data:
-  env: "prod"
-  remoteA: '30026'
-  remoteB : '30028'
+  env: {{.Values.environment}}
+  remoteA: {{.Values.remoteA.prod}}
+  remoteB : {{.Values.remoteB.prod}}
 

@@ -4,7 +4,7 @@ metadata:
   name: uat-shell-app-config
 
 data:
-  env: "uat"
-  remoteA: '30016'
-  remoteB : '30018'
+  env: {{.Values.environment}}
+  remoteA: {{.Values.remoteA.uat}}
+  remoteB : {{.Values.remoteB.uat}}
 

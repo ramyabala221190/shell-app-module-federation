@@ -4,7 +4,7 @@ metadata:
   name: dev-shell-app-config
 
 data:
-  env: "dev"
-  remoteA: '30006'
-  remoteB : '30008'
+  env: {{.Values.environment}}
+  remoteA: {{.Values.remoteA.dev}}
+  remoteB : {{.Values.remoteB.dev}}
 

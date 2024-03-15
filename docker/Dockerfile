@@ -26,7 +26,7 @@ RUN npm run build
 #Stage 2
 
 #FROM nginx:alpine
-FROM nginx:1.19.6-alpine
+FROM nginx:1.19-alpine
 
 #caching files
 VOLUME /var/cache/nginx 

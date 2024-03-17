@@ -28,7 +28,7 @@ remoteB:
  prod: 30028
    
 
-environment: null
+environment: ""
 
 config:
   name: shell-app-config

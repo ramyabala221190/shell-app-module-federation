@@ -43,9 +43,9 @@ COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
 # nginx might think its a server side path and return 404. In such cases we instruct nginx to 
 # redirect to index.html file. This is very important
 #COPY nginx/nginx.config /etc/nginx/conf.d/
-#COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
 
-COPY nginx/nginx.config /etc/nginx/templates/nginx.conf.template
+#COPY nginx/nginx.config /etc/nginx/templates/nginx.conf.template
 
 EXPOSE 80
 

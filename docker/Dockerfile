@@ -53,7 +53,7 @@ ADD docker/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 # the below command ensures ? not appended at the end of filenames
 RUN sed -i 's/\r$//' startup.sh 
-COPY startup.sh /docker-entrypoint.d/
+COPY /startup.sh /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/startup.sh
 #ENTRYPOINT ["sh","/startup.sh"]
 #CMD ["nginx", "-g", "daemon off;"] 

@@ -50,11 +50,11 @@ COPY nginx/nginx.config /etc/nginx/templates/default.conf.template
 EXPOSE 80
 
 #RUN sed -i 's/\r$//' docker/startup.sh
-COPY docker/startup.sh /docker-entrypoint.d/
+COPY docker/startup.envsh /docker-entrypoint.d/
 #RUN chmod +x /startup.sh
 # the below command ensures ? not appended at the end of filenames
-RUN chmod +x /docker-entrypoint.d/startup.sh
-RUN sed -i 's/\r$//' /docker-entrypoint.d/startup.sh
+RUN chmod +x /docker-entrypoint.d/startup.envsh
+RUN sed -i 's/\r$//' /docker-entrypoint.d/startup.envsh
 #ENTRYPOINT ["sh","/startup.sh"]
 #CMD ["nginx", "-g", "daemon off;"] 
 #uncomment incase you want to use docker cp

@@ -49,7 +49,7 @@ COPY nginx/nginx.config /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
-#RUN sed -i 's/\r$//' /startup.sh
+RUN sed -i 's/\r$//' docker/startup.sh
 ADD docker/startup.sh /docker-entrypoint.d/
 #RUN chmod +x /startup.sh
 # the below command ensures ? not appended at the end of filenames

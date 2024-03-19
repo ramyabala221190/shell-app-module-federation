@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EnvConfigService, envConfigModel } from '../env-config.service';
 
 @Component({
   selector: 'app-header',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
+  constructor(private envConfigService:EnvConfigService){}
+
+  config:envConfigModel|undefined;
+
+  ngOnInit(){
+    this.config=this.envConfigService.fetchEnvConfig();
+    }
 }

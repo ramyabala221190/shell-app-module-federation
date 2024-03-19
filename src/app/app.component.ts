@@ -8,12 +8,4 @@ import { EnvConfigService, envConfigModel } from './env-config.service';
 })
 export class AppComponent {
   title = 'shell-application';
-
-  constructor(private envConfigService:EnvConfigService){}
-
-  config:envConfigModel|undefined;
-
-  ngOnInit(){
-    this.config=this.envConfigService.fetchEnvConfig();
-    }
 }

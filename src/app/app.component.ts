@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EnvConfigService, envConfigModel } from './env-config.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'shell-application';
+
+  constructor(private envConfigService:EnvConfigService){}
+
+  config:envConfigModel|undefined;
+
+  ngOnInit(){
+    this.config=this.envConfigService.fetchEnvConfig();
+    }
 }

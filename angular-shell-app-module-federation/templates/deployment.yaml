@@ -32,30 +32,27 @@ spec:
            - name: remoteA
              valueFrom:
                configMapKeyRef:
-              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
                   name: {{.Values.environment}}-{{.Values.config.name}}
-              # Specify the key associated with the value
                   key: remoteA
            - name: remoteB
              valueFrom:
                configMapKeyRef:
-              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
                   name: {{.Values.environment}}-{{.Values.config.name}}
-              # Specify the key associated with the value
                   key: remoteB
+           - name: env
+             valueFrom:
+               configMapKeyRef:
+                  name: {{.Values.environment}}-{{.Values.config.name}}
+                  key: env
            - name: nginxPort
              valueFrom:
                configMapKeyRef:
-              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
                   name: common-{{.Values.config.name}}
-              # Specify the key associated with the value
                   key: nginxPort
            - name: dockerHost
              valueFrom:
                configMapKeyRef:
-              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
                   name: common-{{.Values.config.name}}
-              # Specify the key associated with the value
                   key: dockerHost
      volumes:
      - name: {{.Values.config.volume}}

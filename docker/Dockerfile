@@ -42,21 +42,11 @@ COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
 # have added an additional check. When we are routing to other components with different paths,
 # nginx might think its a server side path and return 404. In such cases we instruct nginx to 
 # redirect to index.html file. This is very important
-#COPY nginx/nginx.config /etc/nginx/conf.d/
-#COPY nginx/nginx.config /etc/nginx/conf.d/default.conf
 
 COPY nginx/nginx.config /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
-#RUN sed -i 's/\r$//' docker/startup.sh
 COPY docker/startup.envsh /docker-entrypoint.d/
-#RUN chmod +x /startup.sh
-# the below command ensures ? not appended at the end of filenames
 RUN chmod +x /docker-entrypoint.d/startup.envsh
 RUN sed -i 's/\r$//' /docker-entrypoint.d/startup.envsh
-#ENTRYPOINT ["sh","/startup.sh"]
-#CMD ["nginx", "-g", "daemon off;"] 
-#uncomment incase you want to use docker cp
-#the command to be executed when the docker container starts. -g daemon off indicates that nginx must run in the foreground
-#this command must execute execute successfully. Otherwise you cannot open the application in the browser.

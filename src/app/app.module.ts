@@ -5,11 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import {HttpClientModule} from '@angular/common/http'
-import { EnvConfigService } from './env-config.service';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin, tap } from 'rxjs';
+import { ModuleFederationConfigLibService } from 'module-federation-config-lib';
 
-function appInitialization(envConfigService:EnvConfigService) :()=>Observable<any>{
-  return ()=>envConfigService.loadConfig();
+function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<any>{
+  return ()=>forkJoin([
+    envConfigLibService.fetchConfiguration("/assets/configurations/config.json","shell-application"),
+    envConfigLibService.fetchConfiguration("/todos/assets/configurations/config.json","todoApp"),
+    envConfigLibService.fetchConfiguration("/users/assets/configurations/config.json","usersApp")
+  ])
 }
 
 
@@ -21,12 +25,12 @@ function appInitialization(envConfigService:EnvConfigService) :()=>Observable<an
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [ {
     provide:APP_INITIALIZER,
     useFactory:appInitialization,
-    deps:[EnvConfigService],
+    deps:[ModuleFederationConfigLibService],
     multi:true
   }],
   bootstrap: [AppComponent]

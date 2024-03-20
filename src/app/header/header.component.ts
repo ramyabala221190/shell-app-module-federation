@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnvConfigService, envConfigModel } from '../env-config.service';
+import { ModuleFederationConfigLibService, configModel } from 'module-federation-config-lib';
 
 @Component({
   selector: 'app-header',
@@ -8,11 +8,11 @@ import { EnvConfigService, envConfigModel } from '../env-config.service';
 })
 export class HeaderComponent {
 
-  constructor(private envConfigService:EnvConfigService){}
+  constructor(private envConfigLibService:ModuleFederationConfigLibService){}
 
-  config:envConfigModel|undefined;
+  config:configModel|undefined;
 
   ngOnInit(){
-    this.config=this.envConfigService.fetchEnvConfig();
+    this.config=this.envConfigLibService.appConfigurationList["shell-application"];
     }
 }

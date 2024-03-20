@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EnvConfigService, envConfigModel } from './env-config.service';
 
 @Component({
   selector: 'app-root',

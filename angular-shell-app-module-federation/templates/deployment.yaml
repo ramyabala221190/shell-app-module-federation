@@ -54,12 +54,12 @@ spec:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
                   key: dockerHost
-            - name: remoteAName
+           - name: remoteAName
              valueFrom:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
                   key: remoteAName
-            - name: remoteBName
+           - name: remoteBName
              valueFrom:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}

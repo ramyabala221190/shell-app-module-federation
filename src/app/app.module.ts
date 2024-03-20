@@ -11,8 +11,8 @@ import { ModuleFederationConfigLibService } from 'module-federation-config-lib';
 function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<any>{
   return ()=>forkJoin([
     envConfigLibService.setConfiguration("/assets/configurations/config.json","shell-application"),
-    envConfigLibService.setConfiguration("/todos/assets/configurations/config.json","todoApp"),
-    envConfigLibService.setConfiguration("/users/assets/configurations/config.json","usersApp")
+    envConfigLibService.setConfiguration("/todoApp/assets/configurations/config.json","todoApp"),
+    envConfigLibService.setConfiguration("/usersApp/assets/configurations/config.json","usersApp")
   ])
 }
 

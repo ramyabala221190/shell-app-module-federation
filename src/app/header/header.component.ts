@@ -13,6 +13,6 @@ export class HeaderComponent {
   config:configModel|undefined;
 
   ngOnInit(){
-    this.config=this.envConfigLibService.appConfigurationList["shell-application"];
+    this.config=this.envConfigLibService.getConfiguration()["shell-application"];
     }
 }

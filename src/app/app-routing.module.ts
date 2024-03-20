@@ -9,7 +9,7 @@ const routes: Routes = [
        type:'manifest',
        remoteName:'toDoApp',
        exposedModule:'./myToDoModule'
-    }).then(m=>m.AppModule)
+    }).then(m=>m.ToDoModule)
   },
   {
     path:"users",

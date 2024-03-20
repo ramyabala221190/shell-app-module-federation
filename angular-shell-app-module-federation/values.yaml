@@ -18,11 +18,13 @@ services:
    prod: 30024
 
 remoteA:
+ name: toDoApp
  dev: 30006
  uat: 30016
  prod: 30026
 
 remoteB:
+ name: usersApp
  dev: 30008
  uat: 30018
  prod: 30028

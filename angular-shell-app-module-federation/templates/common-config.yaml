@@ -7,4 +7,6 @@ data:
   nginxPort: "{{.Values.pod.containerPort}}"
   dockerHost: "172.17.0.1"
   hostName: localhost
+  remoteAName: {{.Values.remoteA.name}}
+  remoteBName: {{.Values.remoteB.name}}
 

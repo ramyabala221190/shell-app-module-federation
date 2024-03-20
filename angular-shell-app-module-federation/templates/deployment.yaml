@@ -29,16 +29,16 @@ spec:
            mountPath: /{{.Values.config.mountPath}}
            readOnly: true
          env:
-           - name: remoteA
+           - name: remoteAPort
              valueFrom:
                configMapKeyRef:
                   name: {{.Values.environment}}-{{.Values.config.name}}
-                  key: remoteA
-           - name: remoteB
+                  key: remoteAPort
+           - name: remoteBPort
              valueFrom:
                configMapKeyRef:
                   name: {{.Values.environment}}-{{.Values.config.name}}
-                  key: remoteB
+                  key: remoteBPort
            - name: env
              valueFrom:
                configMapKeyRef:
@@ -54,6 +54,16 @@ spec:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
                   key: dockerHost
+            - name: remoteAName
+             valueFrom:
+               configMapKeyRef:
+                  name: common-{{.Values.config.name}}
+                  key: remoteAName
+            - name: remoteBName
+             valueFrom:
+               configMapKeyRef:
+                  name: common-{{.Values.config.name}}
+                  key: remoteBName
      volumes:
      - name: {{.Values.config.volume}}
        configMap:

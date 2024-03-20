@@ -5,7 +5,7 @@ metadata:
 
 data:
   nginxPort: "{{.Values.pod.containerPort}}"
-  dockerHost: "172.17.0.1"
+  dockerHost: "{{.Values.dockerHost}}"
   hostName: localhost
   remoteAName: {{.Values.remoteA.name}}
   remoteBName: {{.Values.remoteB.name}}

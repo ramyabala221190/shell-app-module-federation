@@ -5,6 +5,8 @@ pod:
  containerPort: 80
 
 
+dockerHost: 172.17.0.1
+
 services:
   name: "service"
   type: NodePort  #due to external IP pending issue, changed from LoadBalancer to NodePort

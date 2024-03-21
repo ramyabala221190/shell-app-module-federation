@@ -1,5 +1,5 @@
 {
-    "toDoApp": "http://localhost:${remoteAPort}/remoteToDoApp.js",
-    "usersApp":"http://localhost:${remoteBPort}/remoteUsersApp.js"
+    "toDoApp": "http://${hostName}:${remoteAPort}/remoteToDoApp.js",
+    "usersApp":"http://${hostName}:${remoteBPort}/remoteUsersApp.js"
 }
   

@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,11 +10,13 @@ import { ModuleFederationConfigLibService } from 'module-federation-config-lib';
 
 function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<any>{
   return ()=>forkJoin([
-    envConfigLibService.setConfiguration("/assets/configurations/config.json","shell-application"),
-    envConfigLibService.setConfiguration("/toDoApp/assets/configurations/config.json","toDoApp"),
-    envConfigLibService.setConfiguration("/usersApp/assets/configurations/config.json","usersApp")
+    envConfigLibService.setConfiguration("assets/configurations/config.json","shell-application"),
+    envConfigLibService.setConfiguration("assets/configurations/config.json","toDoApp"),
+    envConfigLibService.setConfiguration("assets/configurations/config.json","usersApp")
   ])
 }
+
+export const appName=new InjectionToken("appName");
 
 
 @NgModule({
@@ -32,7 +34,13 @@ function appInitialization(envConfigLibService:ModuleFederationConfigLibService)
     useFactory:appInitialization,
     deps:[ModuleFederationConfigLibService],
     multi:true
-  }],
+  },
+  {
+    provide:appName,
+    useValue:"shell-application"
+  }
+
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

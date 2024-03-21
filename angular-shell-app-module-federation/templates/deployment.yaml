@@ -64,6 +64,11 @@ spec:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
                   key: remoteBName
+           - name: hostName
+             valueFrom:
+               configMapKeyRef:
+                  name: common-{{.Values.config.name}}
+                  key: hostName
      volumes:
      - name: {{.Values.config.volume}}
        configMap:

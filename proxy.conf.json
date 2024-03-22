@@ -1,16 +1,16 @@
 {
-    "/assets/toDoApp/*":{
+    "/toDoApp/assets/*":{
         "target": "http://localhost:5006",
         "secure": false,
         "pathRewrite": {
-            "^/assets/toDoApp/": "/assets/"
+            "^/toDoApp/assets/": "/assets/"
           }
     },
-    "/assets/usersApp/*":{
+    "/usersApp/assets/*":{
         "target": "http://localhost:5008",
         "secure": false,
         "pathRewrite": {
-            "^/assets/usersApp/": "/assets/"
+            "^/usersApp/assets/": "/assets/"
           }
     }
 }

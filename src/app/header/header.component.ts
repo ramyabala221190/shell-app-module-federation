@@ -15,8 +15,6 @@ export class HeaderComponent {
 
 
   ngOnInit(){
-    console.log(this.appName)
-    console.log(this.envConfigLibService.getConfiguration(this.appName))
     this.config=this.envConfigLibService.getConfiguration(this.appName);
     }
 }

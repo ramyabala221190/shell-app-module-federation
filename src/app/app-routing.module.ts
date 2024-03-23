@@ -11,10 +11,10 @@ const routes: Routes = [
        remoteName:'toDoApp',
        exposedModule:'./myToDoModule'
     }).then(m=>m.ToDoModule),
-    resolve: { //resolve added for lazy method
-      configDetails: RemoteConfigurationResolverService
-    },
-    data:{appName:"toDoApp",path:"toDoApp/assets/configurations/config.json"} //data added for lazy method
+    // resolve: { //resolve added for lazy method
+    //   configDetails: RemoteConfigurationResolverService
+    // },
+    // data:{appName:"toDoApp",path:"toDoApp/assets/configurations/config.json"} //data added for lazy method
   },
   {
     path:"users",
@@ -23,10 +23,10 @@ const routes: Routes = [
       remoteName:'usersApp',
       exposedModule:'./myUsersModule'
     }).then(m=>m.UsersModule),
-    resolve: { //resolve added for lazy method
-      configDetails: RemoteConfigurationResolverService 
-    },
-    data:{appName:"usersApp",path:"usersApp/assets/configurations/config.json"}//data added for lazy method
+    // resolve: { //resolve added for lazy method
+    //   configDetails: RemoteConfigurationResolverService 
+    // },
+    // data:{appName:"usersApp",path:"usersApp/assets/configurations/config.json"}//data added for lazy method
   }
 ];
 

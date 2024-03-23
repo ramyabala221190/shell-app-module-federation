@@ -2,5 +2,6 @@
 #cp /usr/share/nginx/html/assets/configurations/config-$(cat /config/env).json /usr/share/nginx/html/assets/configurations/config.json
 envsubst < /usr/share/nginx/html/assets/configurations/config-temp.json > /usr/share/nginx/html/assets/configurations/config.json
 envsubst < /usr/share/nginx/html/assets/manifest/mf-temp.manifest.json > /usr/share/nginx/html/assets/manifest/mf.manifest.json
-echo "Starting container. Runtime environment variables. target environment=$(cat /config/env)" 
+echo "Starting container."
+echo "Runtime target environment accessed from volume : $(cat /config/env) OR  Runtime target environment accessed via environment variable : ${env}" 
 nginx -g 'daemon off;'

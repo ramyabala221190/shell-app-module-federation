@@ -9,18 +9,18 @@ import { Observable, forkJoin, tap } from 'rxjs';
 import { ModuleFederationConfigLibService, configModel } from 'module-federation-config-lib';
 
 //eagerly setting the configuration details for all the applications
-function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<any>{
-  return ()=>forkJoin([
-    envConfigLibService.setConfiguration("assets/configurations/config.json","shell-application"),
-    envConfigLibService.setConfiguration("toDoApp/assets/configurations/config.json","toDoApp"),
-    envConfigLibService.setConfiguration("usersApp/assets/configurations/config.json","usersApp")
-  ])
-}
+// function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<any>{
+//   return ()=>forkJoin([
+//     envConfigLibService.setConfiguration("assets/configurations/config.json","shell-application"),
+//     envConfigLibService.setConfiguration("toDoApp/assets/configurations/config.json","toDoApp"),
+//     envConfigLibService.setConfiguration("usersApp/assets/configurations/config.json","usersApp")
+//   ])
+// }
 
 //lazy loading of config details for the micro-frontends
-// function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<configModel>{
-//   return ()=>envConfigLibService.setConfiguration("assets/configurations/config.json","shell-application") 
-// }
+function appInitialization(envConfigLibService:ModuleFederationConfigLibService) :()=>Observable<configModel>{
+  return ()=>envConfigLibService.setConfiguration("assets/configurations/config.json","shell-application") 
+}
 
 export const appName=new InjectionToken("appName");
 

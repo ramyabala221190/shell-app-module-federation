@@ -77,7 +77,11 @@ jobs:
           #     context: .   # this ensures the paths in the Dockerfile work as expected
           #     file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
           #     tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
-          
+
+          - name: Azure CLI Upgrade
+            run: |
+              az upgrade --yes
+              az version
           
           - name: Azure Login
             uses: azure/login@v2.1.0

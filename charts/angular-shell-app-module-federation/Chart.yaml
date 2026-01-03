@@ -1,0 +1,20 @@
+apiVersion: v2
+name: angular-shell-app-module-federation
+version: 1.0.0
+type: application
+description: A Helm chart for the Angular app
+appVersion: "1.0.0"
+
+
+# Key Fields Explained
+# apiVersion → Chart API version. Use v2 for Helm 3 charts.
+
+# name → Chart name (lowercase, hyphen‑separated recommended).
+
+# version → Chart version (controls .tgz filename). Must follow SemVer (1.0.0, not just 1.0).
+
+# type → Either application (deployable apps) or library (reusable chart helpers).
+
+# description → Human‑readable description.
+
+# appVersion → Version of the actual application being deployed (informational, doesn’t affect .tgz filename).

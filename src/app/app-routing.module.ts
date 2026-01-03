@@ -14,7 +14,7 @@ const routes: Routes = [
     resolve: { //resolve added for lazy method
       configDetails: RemoteConfigurationResolverService
     },
-    data:{appName:"toDoApp",path:"toDoApp/assets/configurations/config.json"} //data added for lazy method
+    data:{appName:"toDoApp",path:"/assets/configurations/config.json"} //data added for lazy method
   },
   {
     path:"users",
@@ -26,7 +26,7 @@ const routes: Routes = [
     resolve: { //resolve added for lazy method
       configDetails: RemoteConfigurationResolverService 
     },
-    data:{appName:"usersApp",path:"usersApp/assets/configurations/config.json"}//data added for lazy method
+    data:{appName:"usersApp",path:"/assets/configurations/config.json"}//data added for lazy method
   }
 ];
 

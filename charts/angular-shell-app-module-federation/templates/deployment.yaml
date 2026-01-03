@@ -14,7 +14,9 @@ spec:
     metadata:
       labels:
         app: {{.Chart.Name}}-deployment-{{.Values.environment}}
-
+      annotations: # This checksum will change whenever the ConfigMap changes 
+        checksum/common-config: {{ include (print $.Template.BasePath "/common-config.yaml") . | sha256sum }} 
+        checksum/env-config: {{ include (print $.Template.BasePath (printf "/%s-config.yaml" .Values.environment)) . | sha256sum }}
     spec:
      containers:
        - name : {{.Chart.Name}}-{{.Values.pod.containerName}}-{{.Values.environment}}
@@ -25,20 +27,7 @@ spec:
          - name: {{.Values.config.volume}}
            mountPath: /{{.Values.config.mountPath}}
            readOnly: true
-         - name: common-{{.Values.config.volume}}
-           mountPath: /{{.Values.config.mountPath}}
-           readOnly: true
          env:
-           - name: remoteAPort
-             valueFrom:
-               configMapKeyRef:
-                  name: {{.Values.environment}}-{{.Values.config.name}}
-                  key: remoteAPort
-           - name: remoteBPort
-             valueFrom:
-               configMapKeyRef:
-                  name: {{.Values.environment}}-{{.Values.config.name}}
-                  key: remoteBPort
            - name: env
              valueFrom:
                configMapKeyRef:
@@ -49,11 +38,11 @@ spec:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
                   key: nginxPort
-           - name: dockerHost
+           - name: ingressPort
              valueFrom:
                configMapKeyRef:
                   name: common-{{.Values.config.name}}
-                  key: dockerHost
+                  key: ingressPort
            - name: remoteAName
              valueFrom:
                configMapKeyRef:

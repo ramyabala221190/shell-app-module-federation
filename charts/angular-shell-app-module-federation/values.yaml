@@ -1,0 +1,29 @@
+
+pod:
+ containerName: "container"
+ imageName: ""
+ containerPort: 80
+ ingressPort: 8080  # for local. For deployment, needs to be updated at helm upgrade
+
+environment: ""  # will be update at the time of helm upgrade
+
+hostName: angular-mf  # added under /etc/hosts file as 127.0.0.1   angular-mf needs to be updated
+
+services:
+  name: "shellapp-service"
+  type: ClusterIP
+  port: 8081
+
+remoteA:
+ path: toDoApp
+ name: todoapp
+
+remoteB:
+ path: usersApp
+ name: usersapp
+
+config:
+  name: shell-app-config
+  volume: shell-app-config-vol
+  mountPath: config
+

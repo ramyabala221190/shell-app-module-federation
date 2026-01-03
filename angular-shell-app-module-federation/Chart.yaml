@@ -1,5 +1,0 @@
-apiVersion: v3
-name : angular-shell-app-module-federation
-version : 1.0
-type: application
-description: A helm chart for the angular app

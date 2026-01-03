@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-shell-app-config
+
+data:
+  nginxPort: "{{.Values.pod.containerPort}}"
+  hostName: {{.Values.hostName}}
+  remoteAName: {{.Values.remoteA.path}}
+  remoteBName: {{.Values.remoteB.path}}
+  ingressPort: "{{.Values.pod.ingressPort}}"

@@ -5,6 +5,4 @@ metadata:
 
 data:
   env: {{.Values.environment}}
-  remoteAPort: "{{.Values.remoteA.uat}}"
-  remoteBPort : "{{.Values.remoteB.uat}}"
 

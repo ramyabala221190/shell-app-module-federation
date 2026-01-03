@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microfrontends-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+spec:
+  rules:
+    - host: {{.Values.hostName}}-{{.Values.environment}}
+      http:
+        paths:
+          - path: /{{.Values.remoteA.path}}/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{.Values.remoteA.name}}-service-{{.Values.environment}}
+                port:
+                  number: {{.Values.services.port}}
+          - path: /{{.Values.remoteB.path}}/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{.Values.remoteB.name}}-service-{{.Values.environment}}
+                port:
+                  number: {{.Values.services.port}}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{.Values.services.name}}-{{.Values.environment}}
+                port:
+                  number: {{.Values.services.port}}

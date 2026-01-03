@@ -89,13 +89,16 @@ jobs:
                client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-               #auth-type: federated
           
           - name: Set AKS context 
             uses: azure/aks-set-context@v3 
             with: 
-              resource-group : myResourceGroup 
-              cluster-name: myAKSCluster
+              resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
+              cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
+
+          - name: Get AKS credentials (admin bypass) 
+            run: | 
+              az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
 
           - name : Create Namespace and Set context
             run: |

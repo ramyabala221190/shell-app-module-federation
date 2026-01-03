@@ -29,6 +29,9 @@ env:
 jobs:
   build-and-deploy:
        runs-on: ubuntu-latest
+       permissions: 
+         id-token: write # required for OIDC 
+         contents: read # required for actions/checkout
 
        env:
         var2: This is job level env var accessible in all steps
@@ -82,6 +85,7 @@ jobs:
                client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+               auth-type: federated
           
           - name: Set AKS context 
             uses: azure/aks-set-context@v3 

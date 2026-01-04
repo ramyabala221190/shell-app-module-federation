@@ -8,24 +8,24 @@ metadata:
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
 spec:
   rules:
-    - host: {{.Values.hostName}}-{{.Values.environment}}
+    - host: {{.Values.hostName}}
       http:
         paths:
-          - path: /{{.Values.remoteA.path}}/
+          - path: /{{.Values.environment}}/{{.Values.remoteA.path}}/
             pathType: Prefix
             backend:
               service:
                 name: {{.Values.remoteA.name}}-service-{{.Values.environment}}
                 port:
                   number: {{.Values.services.port}}
-          - path: /{{.Values.remoteB.path}}/
+          - path: /{{.Values.environment}}/{{.Values.remoteB.path}}/
             pathType: Prefix
             backend:
               service:
                 name: {{.Values.remoteB.name}}-service-{{.Values.environment}}
                 port:
                   number: {{.Values.services.port}}
-          - path: /
+          - path: /{{.Values.environment}}/
             pathType: Prefix
             backend:
               service:

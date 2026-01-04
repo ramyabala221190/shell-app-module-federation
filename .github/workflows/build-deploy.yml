@@ -118,7 +118,7 @@ jobs:
                --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \
-               --set hostName=${{ github.event.inputs.environment }}.${{vars.AZURE_INGRESS_DOMAIN}} \
+               --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
                --set pod.ingressPort=${{vars.AZURE_INGRESS_PORT}}
 
 

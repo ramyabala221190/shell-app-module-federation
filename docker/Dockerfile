@@ -35,7 +35,7 @@ RUN rm -r /usr/share/nginx/html/*
 
 #Now I need to access the dist folder from the previous stage. 
 # I copy the dist folder into the folder that nginx uses to refer static files.
-COPY --from=node /app/dist/shell-application /usr/share/nginx/html/
+COPY --from=node /app/dist/shell-application /usr/share/nginx/html
 
 
 # to replace the default nginx config file with our config file. In our config file we

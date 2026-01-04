@@ -1,5 +1,5 @@
 {
-    "${remoteAName}": "http://${hostName}-${env}:${ingressPort}/${remoteAName}/remote-${remoteAName}.js",
-    "${remoteBName}":"http://${hostName}-${env}:${ingressPort}/${remoteBName}/remote-${remoteBName}.js"
+    "${remoteAName}": "http://${env}.${hostName}:${ingressPort}/${remoteAName}/remote-${remoteAName}.js",
+    "${remoteBName}":"http://${env}.${hostName}:${ingressPort}/${remoteBName}/remote-${remoteBName}.js"
 }
   

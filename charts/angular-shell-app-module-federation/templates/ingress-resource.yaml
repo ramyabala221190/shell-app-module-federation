@@ -9,24 +9,24 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{.Values.hostName}}
+    - host: {{.Values.environment}}.{{.Values.hostName}}
       http:
         paths:
-          - path: /{{.Values.environment}}/{{.Values.remoteA.path}}/
+          - path: /{{.Values.remoteA.path}}/
             pathType: Prefix
             backend:
               service:
                 name: {{.Values.remoteA.name}}-service-{{.Values.environment}}
                 port:
                   number: {{.Values.services.port}}
-          - path: /{{.Values.environment}}/{{.Values.remoteB.path}}/
+          - path: /{{.Values.remoteB.path}}/
             pathType: Prefix
             backend:
               service:
                 name: {{.Values.remoteB.name}}-service-{{.Values.environment}}
                 port:
                   number: {{.Values.services.port}}
-          - path: /{{.Values.environment}}/
+          - path: /
             pathType: Prefix
             backend:
               service:

@@ -77,6 +77,8 @@ jobs:
               context: .   # this ensures the paths in the Dockerfile work as expected
               file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
               tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
+              build-args: |
+                  targetENV=${{github.event.inputs.environment }}
 
           - name: Azure CLI Upgrade
             run: |
@@ -118,7 +120,7 @@ jobs:
                --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \
-               --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
+               --set hostName=${{secrets.AZURE_AKS_IP}}.nip.io \
                --set pod.ingressPort=${{vars.AZURE_INGRESS_PORT}}
 
 

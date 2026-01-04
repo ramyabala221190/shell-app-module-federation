@@ -7,6 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "256m"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: {{.Values.hostName}}
       http:

@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{.Values.environment}}.{{.Values.hostName}}
+    - host: {{.Values.hostName}}
       http:
         paths:
           - path: /{{.Values.remoteA.path}}/

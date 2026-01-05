@@ -110,15 +110,15 @@ jobs:
           - name: Helm package and push to DockerHub
             if: ${{ github.event.inputs.environment == 'dev' }}
             run : |
-               helm package --version=${{ github.event.inputs.version }} ./charts/angular-shell-app-module-federation/
-               helm push ./angular-shell-app-module-federation-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts
+               helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts
           
           - name: Helm Upgrade
             run: |
 
-               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts/angular-shell-app-module-federation \
+               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts/${{vars.HELM_CHART_NAME}} \
                --version ${{ github.event.inputs.version }} \
-               --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml \
+               --install --debug --values ./charts/${{vars.HELM_CHART_NAME}}/values.yaml \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \
                --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \

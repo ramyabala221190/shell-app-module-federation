@@ -124,7 +124,7 @@ jobs:
             run: |
                helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
                --version ${{ github.event.inputs.version }} \
-               --install --debug -f values.yaml \
+               --install --debug \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \
                --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \

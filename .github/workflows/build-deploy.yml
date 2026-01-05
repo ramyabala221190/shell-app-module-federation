@@ -109,9 +109,8 @@ jobs:
 
           - name: Login to Docker Hub for Helm 
             run: | 
-              helm registry login registry-1.docker.io \ 
-              --username ${{ vars.DOCKERHUB_USERNAME }} \ 
-              --password ${{ secrets.DOCKERHUB_PASSWORD }}
+              helm registry login registry-1.docker.io --username ${{ vars.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+
           
           - name: Helm package and push to DockerHub
             if: ${{ github.event.inputs.environment == 'dev' }}

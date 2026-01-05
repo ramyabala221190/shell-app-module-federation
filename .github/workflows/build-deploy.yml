@@ -68,66 +68,66 @@ jobs:
               # added the dockerhub username as repo variable and password as repo secret
 
 
-          - name: Build Docker image for express app
-          # executed only for dev
-            if: ${{ github.event.inputs.environment == 'dev' }}
-            uses: docker/build-push-action@v5
-            with:
-              push: true  # so that image is pushed to Dockerhub as well
-              context: .   # this ensures the paths in the Dockerfile work as expected
-              file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
-              tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
-              build-args: |
-                  targetENV=${{github.event.inputs.environment }}
+          # - name: Build Docker image for shell angular app
+          # # executed only for dev
+          #   if: ${{ github.event.inputs.environment == 'dev' }}
+          #   uses: docker/build-push-action@v5
+          #   with:
+          #     push: true  # so that image is pushed to Dockerhub as well
+          #     context: .   # this ensures the paths in the Dockerfile work as expected
+          #     file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
+          #     tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
+          #     build-args: |
+          #         targetENV=${{github.event.inputs.environment }}
 
-          - name: Azure CLI Upgrade
-            run: |
-              az upgrade --yes
-              az version
+          # - name: Azure CLI Upgrade
+          #   run: |
+          #     az upgrade --yes
+          #     az version
           
-          - name: Azure Login
-            uses: azure/login@v2.3.0
-            with:
-               client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
-               tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-               subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # - name: Azure Login
+          #   uses: azure/login@v2.3.0
+          #   with:
+          #      client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
+          #      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          #      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          - name: Set AKS context 
-            uses: azure/aks-set-context@v3 
-            with: 
-              resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
-              cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
+          # - name: Set AKS context 
+          #   uses: azure/aks-set-context@v3 
+          #   with: 
+          #     resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
+          #     cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
 
-          - name: Get AKS credentials (admin bypass) 
-            run: | 
-              az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
+          # - name: Get AKS credentials (admin bypass) 
+          #   run: | 
+          #     az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
 
-          - name : Create Namespace and Set context
-            run: |
-               kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
-               kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
+          # - name : Create Namespace and Set context
+          #   run: |
+          #      kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
+          #      kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
 
           - name: Login to Docker Hub for Helm 
             run: | 
               helm registry login registry-1.docker.io --username ${{ vars.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
 
           
-          - name: Helm package and push to DockerHub
-            if: ${{ github.event.inputs.environment == 'dev' }}
-            run : |
-               helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
-               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts
+          # - name: Helm package and push to DockerHub
+          #   if: ${{ github.event.inputs.environment == 'dev' }}
+          #   run : |
+          #      helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+          #      helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts
           
-          - name: Helm Upgrade
-            run: |
+          # - name: Helm Upgrade
+          #   run: |
 
-               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts/${{vars.HELM_CHART_NAME}} \
-               --version ${{ github.event.inputs.version }} \
-               --install --debug --values ./charts/${{vars.HELM_CHART_NAME}}/values.yaml \
-               --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
-               --set environment=${{ github.event.inputs.environment }} \
-               --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
-               --set pod.ingressPort=${{vars.AZURE_INGRESS_PORT}}
+          #      helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts/${{vars.HELM_CHART_NAME}} \
+          #      --version ${{ github.event.inputs.version }} \
+          #      --install --debug --values ./charts/${{vars.HELM_CHART_NAME}}/values.yaml \
+          #      --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
+          #      --set environment=${{ github.event.inputs.environment }} \
+          #      --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
+          #      --set pod.ingressPort=${{vars.AZURE_INGRESS_PORT}}
 
 
                            

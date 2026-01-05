@@ -107,16 +107,17 @@ jobs:
                kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
                kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
 
-          - name: Helm package
+          - name: Helm package and push to DockerHub
             if: ${{ github.event.inputs.environment == 'dev' }}
             run : |
                helm package --version=${{ github.event.inputs.version }} ./charts/angular-shell-app-module-federation/
-
-
+               helm push ./angular-shell-app-module-federation-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts
+          
           - name: Helm Upgrade
             run: |
 
-               helm upgrade ${{vars.APP_NAME}}-release ./angular-shell-app-module-federation-${{ github.event.inputs.version }}.tgz \
+               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/charts/angular-shell-app-module-federation \
+               --version ${{ github.event.inputs.version }} \
                --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \

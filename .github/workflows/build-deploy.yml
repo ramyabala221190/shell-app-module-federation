@@ -108,9 +108,11 @@ jobs:
           #      kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
 
           - name: Login to Docker Hub for Helm 
+            env: 
+              DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
+              DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
             run: | 
-              echo ${{ secrets.DOCKERHUB_PA_TOKEN }} | helm registry login registry-1.docker.io \ 
-              --username ${{ vars.DOCKERHUB_USERNAME }} \ --password-stdin
+              helm registry login registry-1.docker.io --username ${env.DOCKERHUB_REGISTRY_USERNAME} --password ${env.DOCKERHUB_REGISTRY_PA_TOKEN}
           
           # - name: Helm package and push to DockerHub
           #   if: ${{ github.event.inputs.environment == 'dev' }}

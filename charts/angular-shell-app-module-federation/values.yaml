@@ -9,6 +9,8 @@ environment: ""  # will be update at the time of helm upgrade
 
 hostName: angular-mf  # added under /etc/hosts file as 127.0.0.1   angular-mf needs to be updated
 
+tlsSecretName: "angular-mf-ssl-secret" #It’s the name of the Kubernetes Secret that will hold your TLS certificate and private key.
+
 services:
   name: "shellapp-service"
   type: ClusterIP

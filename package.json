@@ -19,7 +19,7 @@
     "set-context-dev":"kubectl config set-context --current --namespace=dev-namespace",
     "set-context-uat":"kubectl config set-context --current --namespace=uat-namespace",
     "set-context-prod":"kubectl config set-context --current --namespace=prod-namespace",
-    "helm-pack":"helm package --version=1.0.1 ./charts/angular-shell-app-module-federation/",
+    "helm-pack":"helm package --version=1.0.1 ./charts/angular-shell-app-module-federation/ --destination ./artifacts",
     "helm-upgrade-dev":"helm upgrade shell-app-release ./charts/angular-shell-app-module-federation/ --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=dev",
     "helm-upgrade-uat":"helm upgrade shell-app-release ./angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=uat",
     "helm-upgrade-prod":"helm upgrade shell-app-release ./angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=prod"

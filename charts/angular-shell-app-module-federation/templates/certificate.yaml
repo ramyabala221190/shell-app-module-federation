@@ -4,6 +4,8 @@ kind: Certificate
 metadata:
   name: angular-mf-ssl-cert
   namespace: {{.Values.environment}}-namespace
+  annotations: 
+    cert-manager.io/ingress-class: ingress-nginx-class-{{.Values.environment}}
 spec:
   secretName: angular-mf-ssl-secret
   issuerRef:

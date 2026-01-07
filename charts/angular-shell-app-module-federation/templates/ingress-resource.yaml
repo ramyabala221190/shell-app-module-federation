@@ -7,7 +7,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "256m"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
     {{- if eq .Values.environment "uat" }} 
-    cert-manager.io/cluster-issuer: letsencrypt-prod 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     {{- end }}
 spec:
   {{- if eq .Values.environment "uat" }} 

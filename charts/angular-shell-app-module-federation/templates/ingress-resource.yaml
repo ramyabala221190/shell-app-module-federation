@@ -1,22 +1,22 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: microfrontends-ingress
+  name: microfrontends-ingress-{{.Values.environment}}
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: ingress-nginx-class-{{.Values.environment}}
     nginx.ingress.kubernetes.io/proxy-body-size: "256m"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
-    {{- if eq .Values.environment "prod" }} 
+    {{- if eq .Values.environment "uat" }} 
     cert-manager.io/cluster-issuer: letsencrypt-prod 
     {{- end }}
 spec:
-  {{- if eq .Values.environment "prod" }} 
+  {{- if eq .Values.environment "uat" }} 
   tls: 
   - hosts: 
       - {{ .Values.hostName }} 
     secretName: {{ .Values.tlsSecretName }} 
   {{- end }}
-  ingressClassName: nginx
+  ingressClassName: ingress-nginx-class-{{.Values.environment}}
   rules:
     - host: {{.Values.environment}}.{{.Values.hostName}}
       http:

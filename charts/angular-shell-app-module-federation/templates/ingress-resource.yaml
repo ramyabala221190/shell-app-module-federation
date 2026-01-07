@@ -13,7 +13,7 @@ spec:
   {{- if eq .Values.environment "uat" }} 
   tls: 
   - hosts: 
-      - {{ .Values.hostName }} 
+      - {{.Values.environment}}-{{ .Values.hostName }} 
     secretName: {{ .Values.tlsSecretName }} 
   {{- end }}
   ingressClassName: ingress-nginx-class-{{.Values.environment}}

@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: angular-mf-ssl-cert
+  namespace: {{.Values.environment}}-namespace
+spec:
+  secretName: angular-mf-ssl-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - {{.Values.environment}}-{{.Values.hostName}}

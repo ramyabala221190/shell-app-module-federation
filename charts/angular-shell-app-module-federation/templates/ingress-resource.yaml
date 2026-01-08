@@ -18,6 +18,7 @@ spec:
     secretName: {{ .Values.tlsSecretName }} 
   {{- end }}
   ingressClassName: ingress-nginx-class-{{.Values.environment}}
+  externalTrafficPolicy: "Local"
   rules:
     - host: {{.Values.environment}}-{{.Values.hostName}}
       http:

@@ -7,7 +7,7 @@ metadata:
   annotations: 
     cert-manager.io/ingress-class: ingress-nginx-class-{{.Values.environment}}
 spec:
-  secretName: angular-mf-ssl-secret
+  secretName: {{ .Values.tlsSecretName }} 
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

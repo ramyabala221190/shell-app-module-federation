@@ -33,6 +33,11 @@ spec:
                configMapKeyRef:
                   name: {{.Values.environment}}-{{.Values.config.name}}
                   key: env
+           - name: protocol
+             valueFrom:
+               configMapKeyRef:
+                  name: {{.Values.environment}}-{{.Values.config.name}}
+                  key: protocol
            - name: nginxPort
              valueFrom:
                configMapKeyRef:

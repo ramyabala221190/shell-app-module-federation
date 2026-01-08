@@ -128,7 +128,7 @@ jobs:
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
                --set environment=${{ github.event.inputs.environment }} \
                --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
-               --set pod.ingressPort=${{vars.AZURE_INGRESS_PORT}}
+               --set pod.ingressPort=""
 
 
                            

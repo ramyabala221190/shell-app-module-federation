@@ -3,7 +3,7 @@ pod:
  containerName: "container"
  imageName: ""
  containerPort: 80
- ingressPort: 8080  # for local. For deployment, needs to be updated at helm upgrade
+ ingressPort: ":8080"  # for local. For deployment, needs to be updated at helm upgrade
 
 environment: ""  # will be update at the time of helm upgrade
 

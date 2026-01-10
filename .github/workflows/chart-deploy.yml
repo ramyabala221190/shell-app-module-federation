@@ -154,7 +154,7 @@ jobs:
                --version $VERSION \
                --install --debug \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
-               --set environment=$ENV
+               --set environment=$ENV \
                --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
                --set pod.ingressPort=""
 

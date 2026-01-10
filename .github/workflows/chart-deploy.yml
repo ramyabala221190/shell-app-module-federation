@@ -1,0 +1,160 @@
+name: Deploy-Chart
+
+on: 
+  workflow_call: # this is required when called in another workflow
+    inputs:
+      image_tag:
+        required: true
+        type: string
+      chart_version:
+        required: false
+        type: string
+      environment:
+        required: true
+        type: string
+  workflow_dispatch: # manual trigger from Github
+   inputs:
+     environment:
+        type: choice
+        description: "Specify the environment(dev,uat)"
+        options:
+          - dev
+          - uat
+        required: true
+        default: 'dev'
+      
+     tag:
+      description: "Specify the docker image tag to be pulled"
+      required: true
+     
+     version:
+       description: "Specify the version of the helm artifacts"
+       required: false
+
+jobs:
+  chart-deploy:
+       # Run if upstream workflow has completed and also succeeded OR if triggered manually 
+       runs-on: ubuntu-latest
+       # peromissions are required here as well in case we execute this as a seperate workflow
+       permissions: 
+         id-token: write # required for OIDC 
+         contents: read # required for actions/checkout
+
+       env:
+        var2: This is job level env var accessible in all steps
+
+       steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4 
+            env:
+             var3: This is step level env var accessible only in this step
+
+          - name: Debug workflow_run outputs
+            run: |
+               echo "workflow_run image_tag: $WORKFLOW_IMAGE_TAG"
+               echo "workflow_run chart_version: $WORKFLOW_CHART_VERSION"
+            env:
+             WORKFLOW_IMAGE_TAG: ${{ inputs.image_tag }}
+             WORKFLOW_CHART_VERSION: ${{ inputs.chart_version}}
+
+          - name: Set Docker Image tag 
+            run: | 
+              if [ -n "$INPUT_TAG" ]; then 
+                echo "TAG=$INPUT_TAG" >> $GITHUB_ENV 
+              else 
+                echo "TAG=$WORKFLOW_IMAGE_TAG" >> $GITHUB_ENV 
+              fi 
+            env: 
+              INPUT_TAG: ${{ github.event.inputs.tag }} 
+              WORKFLOW_IMAGE_TAG: ${{ inputs.image_tag }}
+
+          - name: Set Helm Chart version
+            run : |
+                  if [ -n "$INPUT_VERSION" ]; then
+                     echo "VERSION=$INPUT_VERSION" >> $GITHUB_ENV
+                  else
+                     echo "VERSION=$WORKFLOW_CHART_VERSION" >> $GITHUB_ENV
+                  fi
+            env: 
+              INPUT_VERSION: ${{ github.event.inputs.version }} 
+              WORKFLOW_CHART_VERSION: ${{ inputs.chart_version }}
+
+          
+          - name: Set environment
+            run : |
+                if [ -n "$INPUT_ENV" ]; then
+                     echo "ENV=$INPUT_ENV" >> $GITHUB_ENV
+                else
+                     echo "ENV=$WORKFLOW_ENV" >> $GITHUB_ENV
+                fi
+            env: 
+              INPUT_ENV: ${{ github.event.inputs.environment }} 
+              WORKFLOW_ENV: ${{ inputs.environment }}
+
+              
+
+          
+          - name: Debug
+            run: | 
+              echo "TAG=$TAG" 
+              echo "VERSION=$VERSION"
+        
+          - name: Validate empty inputs
+          #  -z does the empty string check. dont use env.TAG or env.VERSION. Use run time values
+            run: |
+             if [[ -z "$TAG" || -z "$VERSION" ]]; then
+               echo "ERROR: Chart version and Image tag are required for chart deployment"
+               exit 1
+             fi
+          
+          
+          - name: Azure CLI Upgrade
+            run: |
+              az upgrade --yes
+              az version
+          
+          - name: Azure Login
+            uses: azure/login@v2.3.0
+            with:
+               client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
+               tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+               subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          
+          - name: Set AKS context 
+            uses: azure/aks-set-context@v3 
+            with: 
+              resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
+              cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
+
+          - name: Get AKS credentials (admin bypass) 
+            run: | 
+              az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
+
+          - name : Create Namespace and Set context
+            run: |
+               kubectl create namespace $ENV-namespace --dry-run=client -o yaml | kubectl apply -f -
+               kubectl config set-context --current --namespace=$ENV-namespace
+
+          - name: Login to Docker Hub for Helm 
+            env: 
+              DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
+              DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
+            run: | 
+              helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
+          
+          - name: Helm package and push to DockerHub
+            if: ${{ env.ENV == 'dev' }}
+            run : |
+               helm package --version=$VERSION ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-$VERSION.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
+          
+          - name: Helm Upgrade
+            run: |
+               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
+               --version $VERSION \
+               --install --debug \
+               --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
+               --set environment=$ENV
+               --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
+               --set pod.ingressPort=""
+

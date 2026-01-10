@@ -1,0 +1,140 @@
+name: Build-Deploy-Shell-App
+
+# workflow_dispatch ensures we have manual trigger of workflow and we can provide user input details as well
+on: 
+ workflow_dispatch:
+   inputs:
+     environment:
+        type: choice
+        description: "Specify the environment"
+        options:
+          - dev
+        required: true
+        default: 'dev'
+      
+     version:
+       description: "Specify the version of the helm artifacts"
+       required: true
+       
+
+env:
+ TAG: ${{ github.run_id }} 
+
+jobs:
+  build-and-deploy:
+       runs-on: ubuntu-latest
+       permissions: 
+         id-token: write # required for OIDC 
+         contents: read # required for actions/checkout
+
+       env:
+        var2: This is job level env var accessible in all steps
+
+       steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4 
+            env:
+             var3: This is step level env var accessible only in this step  
+        
+
+          # - name: Validate PROD inputs
+          # # for prod deployments the tag input from the user must not be empty. -z does the empty string check
+          #   run: |
+          #    if [[ "${{ github.event.inputs.environment }}" != "dev" && -z "${{ github.event.inputs.tag }}" ]]; then
+          #    echo "ERROR: tag is required for PROD/UAT deployments"
+          #    exit 1
+          #    fi
+          
+          # - name: Set conditional env
+          # # for prod we overwriting the value of the tab env variable to the tag input provided by the user.
+          #   run: |
+          #    if [[ "${{ github.event.inputs.environment }}" == "prod" || "${{ github.event.inputs.environment }}" == "uat" ]]; then
+          #    echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+          #    fi
+
+          - name: Login to DockerHub
+          # executed only for dev
+            if: ${{ github.event.inputs.environment == 'dev' }}
+            uses: docker/login-action@v3
+            with:
+              username: ${{vars.DOCKERHUB_USERNAME}}
+              password: ${{secrets.DOCKERHUB_PASSWORD}}
+              # added the dockerhub username as repo variable and password as repo secret
+
+
+          - name: Build Docker image for shell angular app
+          # executed only for dev
+            if: ${{ github.event.inputs.environment == 'dev' }}
+            uses: docker/build-push-action@v5
+            with:
+              push: true  # so that image is pushed to Dockerhub as well
+              context: .   # this ensures the paths in the Dockerfile work as expected
+              file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
+              tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
+              build-args: |
+                  targetENV=${{github.event.inputs.environment }}
+
+          # - name: Azure CLI Upgrade
+          #   run: |
+          #     az upgrade --yes
+          #     az version
+          
+          # - name: Azure Login
+          #   uses: azure/login@v2.3.0
+          #   with:
+          #      client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
+          #      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          #      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          
+          # - name: Set AKS context 
+          #   uses: azure/aks-set-context@v3 
+          #   with: 
+          #     resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
+          #     cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
+
+          # - name: Get AKS credentials (admin bypass) 
+          #   run: | 
+          #     az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
+
+          # - name : Create Namespace and Set context
+          #   run: |
+          #      kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
+          #      kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
+
+          # - name: Login to Docker Hub for Helm 
+          #   env: 
+          #     DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
+          #     DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
+          #   run: | 
+          #     helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
+          
+          # - name: Helm package and push to DockerHub
+          #   if: ${{ github.event.inputs.environment == 'dev' }}
+          #   run : |
+          #      helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+          #      helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
+          
+          # - name: Helm Upgrade
+          #   run: |
+          #      helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
+          #      --version ${{ github.event.inputs.version }} \
+          #      --install --debug \
+          #      --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
+          #      --set environment=${{ github.event.inputs.environment }} \
+          #      --set hostName=${{vars.AZURE_INGRESS_DOMAIN}} \
+          #      --set pod.ingressPort=""
+  
+  helm-upgrade:
+    needs: build-and-deploy  # execute in sequence. The build-and-deploy job needs to complete first
+    permissions:  # these are required for azure login
+         id-token: write # required for OIDC 
+         contents: read # required for actions/checkout
+    uses: ./.github/workflows/chart-deploy.yml  # path to the workflow to be executed
+    with:  # input parameters to be passed
+      image_tag: ${{ github.run_id }} 
+      chart_version: ${{ github.event.inputs.version }}
+      environment: ${{ github.event.inputs.environment }}
+    secrets: inherit  # github secrets can be inherited from the current workflow. v.imp for secrets to work in the called workflow
+
+                           
+

@@ -108,12 +108,12 @@ rules:
     - host: {{.Values.environment}}-{{.Values.hostName}}
 ```
 
-I will access the dev shell MF on http://dev-angular-mf:8080/
-I will access the uat shell MF on http://uat-angular-mf:8080/
-I will access the prod shell MF on http://prod-angular-mf:8080/
+I will access the dev shell MF on http://dev-angular-mf:8082/
+I will access the uat shell MF on http://uat-angular-mf:8083/
+I will access the prod shell MF on http://prod-angular-mf:8084/
 
 
-Now you may think, if Ingress is running on port 80, why have we mentioned port 8080 in the above urls ?
+Now you may think, if Ingress is running on port 80, why have we mentioned port 8082/8083/8084 in the above urls ?
 
 Before we get to that, lets understand how to install Ingress Controller using helm
 

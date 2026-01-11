@@ -8,11 +8,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js",
-    "start-dev":"npm run build-docker && npm run create-namespace-dev && npm run set-context-dev && npm run helm-pack && npm run helm-upgrade-dev && npm run port-forward",
+    "start-dev":"npm run build-docker && npm run create-namespace-dev && npm run set-context-dev && npm run helm-pack && npm run helm-upgrade-dev",
     "start-uat":"npm run create-namespace-uat && npm run set-context-uat && npm run helm-upgrade-uat",
     "start-prod":"npm run create-namespace-prod && npm run set-context-prod && npm run helm-upgrade-prod",
-    "port-forward":"kubectl port-forward svc/ingress-nginx-controller -n ingress-nginx 8080:80",
-    "build-docker":"docker build -f docker/Dockerfile -t shell-app:5 .",
+    "build-docker":"docker build -f docker/Dockerfile -t shell-app:25 .",
     "create-namespace-dev":"kubectl create namespace dev-namespace --dry-run=client -o yaml | kubectl apply -f -",
     "create-namespace-uat":"kubectl create namespace uat-namespace --dry-run=client -o yaml | kubectl apply -f -",
     "create-namespace-prod":"kubectl create namespace prod-namespace --dry-run=client -o yaml | kubectl apply -f -",
@@ -20,9 +19,9 @@
     "set-context-uat":"kubectl config set-context --current --namespace=uat-namespace",
     "set-context-prod":"kubectl config set-context --current --namespace=prod-namespace",
     "helm-pack":"helm package --version=1.0.1 ./charts/angular-shell-app-module-federation/ --destination ./artifacts",
-    "helm-upgrade-dev":"helm upgrade shell-app-release ./charts/angular-shell-app-module-federation/ --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=dev",
-    "helm-upgrade-uat":"helm upgrade shell-app-release ./angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=uat",
-    "helm-upgrade-prod":"helm upgrade shell-app-release ./angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:5 --set environment=prod"
+    "helm-upgrade-dev":"helm upgrade shell-app-release ./charts/angular-shell-app-module-federation/ --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:25 --set environment=dev --set pod.ingressPort=:8082",
+    "helm-upgrade-uat":"helm upgrade shell-app-release ./artifacts/angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:25 --set environment=uat --set pod.ingressPort=:8083",
+    "helm-upgrade-prod":"helm upgrade shell-app-release ./artifacts/angular-shell-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-shell-app-module-federation/values.yaml --set pod.imageName=shell-app:25 --set environment=prod --set pod.ingressPort=:8084"
 
   },
   "private": true,
